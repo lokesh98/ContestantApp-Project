@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ContestantDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Contestant">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Firstname" Type="varchar" MaxLength="50" />
+    <Property Name="Lastname" Type="varchar" MaxLength="50" />
+    <Property Name="DateOfBirth" Type="datetime" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="DistrictId" Type="int" />
+    <Property Name="Gender" Type="varchar" MaxLength="20" />
+    <Property Name="PhotoUrl" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="ContestantRating">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ContestantId" Type="int" />
+    <Property Name="Rating" Type="int" />
+    <Property Name="RatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="District">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Contestant_District">
+    <End Role="District" Type="Self.District" Multiplicity="0..1" />
+    <End Role="Contestant" Type="Self.Contestant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="District">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contestant">
+        <PropertyRef Name="DistrictId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ContestantRating_Contestant">
+    <End Role="Contestant" Type="Self.Contestant" Multiplicity="0..1" />
+    <End Role="ContestantRating" Type="Self.ContestantRating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contestant">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ContestantRating">
+        <PropertyRef Name="ContestantId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="sp_Get_AVG_Rating" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <EntityContainer Name="ContestantDBModelStoreContainer">
+    <EntitySet Name="Contestant" EntityType="Self.Contestant" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ContestantRating" EntityType="Self.ContestantRating" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="District" EntityType="Self.District" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Contestant_District" Association="Self.FK_Contestant_District">
+      <End Role="District" EntitySet="District" />
+      <End Role="Contestant" EntitySet="Contestant" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ContestantRating_Contestant" Association="Self.FK_ContestantRating_Contestant">
+      <End Role="Contestant" EntitySet="Contestant" />
+      <End Role="ContestantRating" EntitySet="ContestantRating" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

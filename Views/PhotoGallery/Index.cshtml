@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ContestantApplications.ViewModel.ContestantViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Content/StyleSheet1.css" rel="stylesheet" />
+<h4>Photo Gallery</h4>
+
+
+<div class="container">
+    <div class="panel panel-primary">
+        <div class="panel-heading">Active Contestant Photo Gallery</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="gallery">
+                    @foreach (var item in Model)
+                    {
+
+                        <figure>
+                            <img src="@item.PhotoUrl" alt="" style="height:200px;width:200" />
+                            @*<figcaption>Daytona Beach <small>United States</small></figcaption>*@
+                        </figure>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

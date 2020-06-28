@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ContestantDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Contestant">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="DistrictId" Type="Int32" />
+    <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PhotoUrl" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="District" Relationship="Self.FK_Contestant_District" FromRole="Contestant" ToRole="District" />
+    <NavigationProperty Name="ContestantRatings" Relationship="Self.FK_ContestantRating_Contestant" FromRole="Contestant" ToRole="ContestantRating" />
+  </EntityType>
+  <EntityType Name="ContestantRating">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContestantId" Type="Int32" />
+    <Property Name="Rating" Type="Int32" />
+    <Property Name="RatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Contestant" Relationship="Self.FK_ContestantRating_Contestant" FromRole="ContestantRating" ToRole="Contestant" />
+  </EntityType>
+  <EntityType Name="District">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Contestants" Relationship="Self.FK_Contestant_District" FromRole="District" ToRole="Contestant" />
+  </EntityType>
+  <Association Name="FK_Contestant_District">
+    <End Role="District" Type="Self.District" Multiplicity="0..1" />
+    <End Role="Contestant" Type="Self.Contestant" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="District">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Contestant">
+        <PropertyRef Name="DistrictId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ContestantRating_Contestant">
+    <End Role="Contestant" Type="Self.Contestant" Multiplicity="0..1" />
+    <End Role="ContestantRating" Type="Self.ContestantRating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Contestant">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ContestantRating">
+        <PropertyRef Name="ContestantId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ContestantDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Contestants" EntityType="Self.Contestant" />
+    <EntitySet Name="ContestantRatings" EntityType="Self.ContestantRating" />
+    <EntitySet Name="Districts" EntityType="Self.District" />
+    <AssociationSet Name="FK_Contestant_District" Association="Self.FK_Contestant_District">
+      <End Role="District" EntitySet="Districts" />
+      <End Role="Contestant" EntitySet="Contestants" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ContestantRating_Contestant" Association="Self.FK_ContestantRating_Contestant">
+      <End Role="Contestant" EntitySet="Contestants" />
+      <End Role="ContestantRating" EntitySet="ContestantRatings" />
+    </AssociationSet>
+    <FunctionImport Name="sp_Get_AVG_Rating" ReturnType="Collection(ContestantDBModel.sp_Get_AVG_Rating_Result)" />
+  </EntityContainer>
+  <ComplexType Name="sp_Get_AVG_Rating_Result">
+    <Property Type="String" Name="Address" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="Fullname" Nullable="true" MaxLength="101" />
+    <Property Type="DateTime" Name="DateOfBirth" Nullable="true" Precision="23" />
+    <Property Type="String" Name="District" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Firstname" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="Lastname" Nullable="true" MaxLength="50" />
+    <Property Type="Boolean" Name="IsActive" Nullable="true" />
+    <Property Type="Int32" Name="AvgRating" Nullable="false" />
+    <Property Type="Int32" Name="CId" Nullable="false" />
+  </ComplexType>
+</Schema>

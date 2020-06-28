@@ -1,0 +1,160 @@
+﻿@model ContestantApplications.ViewModel.ContestantPageViewModel
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h4>Contestant Info</h4>
+<div>
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-success" id="success-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            <strong>Success:</strong>  @TempData["message"].ToString().
+        </div>
+    }
+</div>
+<p class="pull-right">
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.FullName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.DistrictId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Gender)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Contestant.Address)
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model.PaginatedContestant())
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Districts.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are sure wants to delete?');" })
+            </td>
+        </tr>
+    }
+    <tfoot>
+        <tr>
+            <td colspan="5">
+                <ul class="pagination">
+                    @for (int i = 1; i <= Model.PageCount(); i++)
+                    {
+                        <li class="@(i == Model.CurrentPage ? "page-item active" : "page-item")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = i })">@i</a>
+                        </li>
+
+                    }
+                </ul>
+            </td>
+        </tr>
+
+    </tfoot>
+</table>
+
+
+
+<script type="text/javascript">
+   $("#success-alert").fadeTo(2000, 500).slideUp(500, function(){
+    $("#success-alert").slideUp(500);
+});
+</script>
+
+
+
+
+
+
+@*@model IEnumerable<ContestantApplications.ViewModel.ContestantViewModel>
+
+    @{
+        ViewBag.Title = "Index";
+    }
+
+    <h4>Contestant Info</h4>
+
+    <p class="pull-right">
+        @Html.ActionLink("Create New", "Create",null,new { @class= "btn btn-primary"})
+    </p>
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FullName)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfBirth)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DistrictId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>Action</th>
+        </tr>
+
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfBirth)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Districts.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id },new { onclick = "return confirm('Are sure wants to delete?');" })
+            </td>
+        </tr>
+    }
+
+    </table>*@

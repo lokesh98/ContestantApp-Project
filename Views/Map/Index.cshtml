@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h4>Map of  Nepal</h4>
+<style type="text/css">
+    #mapid {
+        height: 380px;
+    }
+</style>
+
+<div id="mapid"></div>
+
+
+
+<script type="text/javascript">
+    
+    var map = L.map('mapid', {
+        'center': [10,10],
+        'zoom': 7,
+        'layers': [
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                'attribution': 'Map data &copy; OpenStreetMap contributors'
+            })
+        ]
+    }).setView([28.41752832637288,84.13003176934866], 6);
+  //  map =L.map('mapid').setView([28.41752832637288,84.13003176934866], 13);
+
+    $.getJSON('../Data/nepalmapjson.json', function (geojson) {
+        L.geoJson(geojson, {
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup(feature.properties.name);
+                 //layer.bindPopup("<b>"+ layer.feature.properties.name +"</b><br/><br/>"+ layer.feature.properties.address);
+            }
+        }).addTo(map);
+    });
+
+
+</script>
